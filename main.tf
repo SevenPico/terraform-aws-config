@@ -1,17 +1,9 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # Enable and configure AWS Config
 # ----------------------------------------------------------------------------------------------------------------------
-module "aws_config_label" {
-  source  = "cloudposse/label/null"
-  version = "0.25.0"
-
-  attributes = ["config"]
-  context    = module.this.context
-}
-
 resource "aws_config_configuration_recorder" "recorder" {
   count    = module.this.enabled ? 1 : 0
-  name     = module.aws_config_label.id
+  name     = module.this.id
   role_arn = local.create_iam_role ? module.iam_role[0].arn : var.iam_role_arn
   recording_group {
     all_supported                 = true
@@ -21,7 +13,7 @@ resource "aws_config_configuration_recorder" "recorder" {
 
 resource "aws_config_delivery_channel" "channel" {
   count          = module.this.enabled ? 1 : 0
-  name           = module.aws_config_label.id
+  name           = module.this.id
   s3_bucket_name = var.s3_bucket_id
   s3_key_prefix  = var.s3_key_prefix
   sns_topic_arn  = local.findings_notification_arn
