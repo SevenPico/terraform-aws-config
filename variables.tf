@@ -145,3 +145,8 @@ variable "disabled_aggregation_regions" {
   description = "A list of regions where config aggregation is disabled"
   default     = ["ap-northeast-3"]
 }
+
+variable "enable_organization_aggregation" {
+  type = bool
+  default = false
+}

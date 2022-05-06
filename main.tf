@@ -124,6 +124,13 @@ data "aws_iam_policy" "aws_config_built_in_role" {
   arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
+resource "aws_iam_role_policy_attachment" "config_org_policy_attachment" {
+  count = module.this.enabled && local.create_iam_role && var.enable_organization_aggregation ? 1 : 0
+
+  role       = module.iam_role[0].name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRoleForOrganizations"
+}
+
 data "aws_iam_policy_document" "config_s3_policy" {
   count = local.create_iam_role ? 1 : 0
 
@@ -177,12 +184,23 @@ resource "aws_config_configuration_aggregator" "this" {
   count = local.enabled && local.is_central_account && local.is_global_recorder_region ? 1 : 0
 
   name = module.aws_config_aggregator_label.id
-  account_aggregation_source {
-    account_ids = local.child_resource_collector_accounts
-    all_regions = true
+  tags = module.this.tags
+
+  dynamic "account_aggregation_source" {
+    for_each = var.enable_organization_aggregation ? [] : [1]
+    content {
+      account_ids = local.child_resource_collector_accounts
+      all_regions = true
+    }
   }
 
-  tags = module.this.tags
+  dynamic "organization_aggregation_source" {
+    for_each = var.enable_organization_aggregation ? [1] : []
+    content {
+      all_regions = true
+      role_arn = local.create_iam_role ? module.iam_role[0].arn : var.iam_role_arn
+    }
+  }
 }
 
 resource "aws_config_aggregate_authorization" "child" {
