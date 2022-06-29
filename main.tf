@@ -181,7 +181,7 @@ module "aws_config_aggregator_label" {
 resource "aws_config_configuration_aggregator" "this" {
   # Create the aggregator in the global recorder region of the central AWS Config account. This is usually the
   # "security" account
-  count = local.enabled && local.is_central_account && local.is_global_recorder_region ? 1 : 0
+  count = local.enabled && local.is_central_account && local.is_global_recorder_region && var.enable_organization_aggregation ? 1 : 0
 
   name = module.aws_config_aggregator_label.id
   tags = module.this.tags
