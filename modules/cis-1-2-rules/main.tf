@@ -39,7 +39,7 @@ locals {
     input_parameters = merge(rule.inputParameters, lookup(local.params, key, {}), lookup(var.parameter_overrides, key, {})),
     tags             = rule.tags,
     enabled          = rule.enabled,
-  } if module.this.enabled }
+  } if module.context.enabled }
 }
 
 module "aws_config_rules_yaml_config" {
@@ -49,7 +49,7 @@ module "aws_config_rules_yaml_config" {
   map_config_local_base_path = path.module
   map_config_paths           = var.config_rules_paths
 
-  context = module.this.context
+  context = module.context.legacy
 }
 
 data "aws_region" "current" {}

@@ -1,5 +1,5 @@
 resource "aws_config_conformance_pack" "default" {
-  name = module.this.name
+  name = module.context.name
 
   dynamic "input_parameter" {
     for_each = var.parameter_overrides
