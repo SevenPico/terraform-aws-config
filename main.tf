@@ -88,8 +88,8 @@ module "aws_config_findings_label" {
 #-----------------------------------------------------------------------------------------------------------------------
 module "iam_role" {
   count   = module.context.enabled && local.create_iam_role ? 1 : 0
-  source  = "cloudposse/iam-role/aws"
-  version = "0.15.0"
+  source  = "app.terraform.io/SevenPico/iam-role/aws"
+  version = "0.16.2.2"
 
   principals = {
     "Service" = ["config.amazonaws.com"]
@@ -110,7 +110,7 @@ module "iam_role" {
 
   attributes = ["config"]
 
-  context = module.context.legacy
+  context = module.context.self
 }
 
 resource "aws_iam_role_policy_attachment" "config_policy_attachment" {
