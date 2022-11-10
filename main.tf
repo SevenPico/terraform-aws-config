@@ -5,6 +5,7 @@ resource "aws_config_configuration_recorder" "recorder" {
   count    = module.context.enabled ? 1 : 0
   name     = module.context.id
   role_arn = local.create_iam_role ? module.iam_role[0].arn : var.iam_role_arn
+
   recording_group {
     all_supported                 = true
     include_global_resource_types = local.is_global_recorder_region
@@ -181,7 +182,7 @@ module "aws_config_aggregator_label" {
 resource "aws_config_configuration_aggregator" "this" {
   # Create the aggregator in the global recorder region of the central AWS Config account. This is usually the
   # "security" account
-  count = local.enabled && local.is_central_account && local.is_global_recorder_region && var.enable_organization_aggregation ? 1 : 0
+  count = local.enabled && local.is_global_recorder_region && (local.is_central_account || var.enable_organization_aggregation) ? 1 : 0
 
   name = module.aws_config_aggregator_label.id
   tags = module.context.tags
