@@ -52,8 +52,8 @@ resource "aws_config_config_rule" "rules" {
 # Optionally create an SNS topic and subscriptions
 #-----------------------------------------------------------------------------------------------------------------------
 module "sns_topic" {
-  source  = "app.terraform.io/SevenPico/sns-topic/aws"
-  version = "0.20.1.3"
+  source  = "SevenPicoForks/sns-topic/aws"
+  version = "2.0.0"
   count   = module.context.enabled && local.create_sns_topic ? 1 : 0
 
   attributes = concat(module.context.attributes, ["config"])
@@ -89,8 +89,8 @@ module "aws_config_findings_label" {
 #-----------------------------------------------------------------------------------------------------------------------
 module "iam_role" {
   count   = module.context.enabled && local.create_iam_role ? 1 : 0
-  source  = "app.terraform.io/SevenPico/iam-role/aws"
-  version = "0.16.2.2"
+  source  = "SevenPicoForks/iam-role/aws"
+  version = "2.0.0"
 
   principals = {
     "Service" = ["config.amazonaws.com"]
