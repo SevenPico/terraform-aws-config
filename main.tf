@@ -76,8 +76,8 @@ module "sns_topic" {
 }
 
 module "aws_config_findings_label" {
-  source  = "app.terraform.io/SevenPico/context/null"
-  version = "1.0.2" # requires Terraform >= 0.13.0
+  source  = "SevenPico/context/null"
+  version = "2.0.0" # requires Terraform >= 0.13.0
 
   attributes = ["config", "findings"]
 
@@ -171,8 +171,8 @@ data "aws_iam_policy_document" "config_sns_policy" {
 # CONFIG AGGREGATION
 #-----------------------------------------------------------------------------------------------------------------------
 module "aws_config_aggregator_label" {
-  source  = "app.terraform.io/SevenPico/context/null"
-  version = "1.0.2" # requires Terraform >= 0.13.0
+  source  = "SevenPico/context/null"
+  version = "2.0.0" # requires Terraform >= 0.13.0
 
   attributes = ["config", "aggregator"]
 
