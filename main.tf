@@ -2,13 +2,14 @@
 # Enable and configure AWS Config
 # ----------------------------------------------------------------------------------------------------------------------
 resource "aws_config_configuration_recorder" "recorder" {
+  #checkov:skip=CKV2_AWS_48:skipping 'Ensure AWS Config must record all possible resources' because it is configured through 'local.is_global_recorder_region'
   count    = module.context.enabled ? 1 : 0
   name     = module.context.id
   role_arn = local.create_iam_role ? module.iam_role[0].arn : var.iam_role_arn
 
   recording_group {
     all_supported                 = true
-    include_global_resource_types = true #local.is_global_recorder_region
+    include_global_resource_types = local.is_global_recorder_region
   }
 }
 
