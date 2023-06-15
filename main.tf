@@ -27,7 +27,7 @@ resource "aws_config_delivery_channel" "channel" {
 
 resource "aws_config_configuration_recorder_status" "recorder_status" {
   count      = module.context.enabled ? 1 : 0
-  name       = aws_config_configuration_recorder.recorder[0].name
+  name       = aws_config_configuration_recorder.recorder.name  #aws_config_configuration_recorder.recorder[0].name
   is_enabled = true
   depends_on = [aws_config_delivery_channel.channel]
 }
