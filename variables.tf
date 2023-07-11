@@ -147,6 +147,6 @@ variable "disabled_aggregation_regions" {
 }
 
 variable "enable_organization_aggregation" {
-  type = bool
+  type    = bool
   default = false
 }
